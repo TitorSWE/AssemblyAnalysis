@@ -1,0 +1,37 @@
+.cfi_startproc
+	endbr64
+	push	rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	mov	rbp, rsp
+	.cfi_def_cfa_register 6
+	sub	rsp, 64
+	mov	rax, QWORD PTR fs:40
+	mov	QWORD PTR -8[rbp], rax
+	xor	eax, eax
+	mov	DWORD PTR -48[rbp], 1
+	mov	DWORD PTR -44[rbp], 3
+	mov	DWORD PTR -40[rbp], 5
+	mov	DWORD PTR -36[rbp], 7
+	mov	DWORD PTR -32[rbp], 9
+	mov	DWORD PTR -28[rbp], 11
+	mov	DWORD PTR -24[rbp], 13
+	mov	DWORD PTR -20[rbp], 15
+	mov	DWORD PTR -16[rbp], 17
+	mov	DWORD PTR -12[rbp], 19
+	mov	DWORD PTR -56[rbp], 13
+	mov	edx, DWORD PTR -56[rbp]
+	lea	rax, -48[rbp]
+	mov	esi, 10
+	mov	rdi, rax
+	call	binarySearch
+	mov	DWORD PTR -52[rbp], eax
+	cmp	DWORD PTR -52[rbp], -1
+	je	.L8
+	mov	edx, DWORD PTR -52[rbp]
+	mov	eax, DWORD PTR -56[rbp]
+	mov	esi, eax
+	lea	rdi, .LC0[rip]
+	mov	eax, 0
+	call	printf@PLT
+	jmp	.L9
