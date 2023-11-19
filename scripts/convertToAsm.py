@@ -16,7 +16,7 @@ c_files = [file for file in os.listdir(source_directory) if file.endswith(".c")]
 # Compile each C file to ASM and save in the destination directory
 for c_file in c_files:
     # Remove the .c extension and add .asm
-    asm_file = os.path.splitext(c_file)[0] + ".asm"
+    asm_file = os.path.splitext(c_file)[0] + ".s"
     
     # Full paths to the source and destination files
     source_path = os.path.join(source_directory, c_file)
@@ -24,7 +24,7 @@ for c_file in c_files:
     
     # Use the C compiler to generate ASM code
     try:
-        result = subprocess.run(["gcc", "-S", "-o", destination_path, source_path], capture_output=True, text=True)
+        result = subprocess.run(["gcc", "-O0", "-masm=intel", "-fno-inline", "-S", "-o", destination_path, source_path], capture_output=True, text=True)
         if result.returncode == 0:
             print(f"Successfully generated {asm_file}")
         else:

@@ -1,0 +1,15 @@
+mov eax, imm
+mov rax, [rbp-32]
+mov rax, [rbp-16]
+mov rsi, rax
+mov rdi, rax
+mov rax, [rbp-8]
+mov [rbp-8], rax
+call imm
+test rax, rax
+cmp eax, imm
+mov [rbp-1], imm
+mov [rax], rdx
+mov [rax], imm
+mov rsi, rcx
+xor eax, eax

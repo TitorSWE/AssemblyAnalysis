@@ -1,4 +1,5 @@
 	.file	"fibonacci.c"
+	.intel_syntax noprefix
 	.text
 	.globl	fibonacci
 	.type	fibonacci, @function
@@ -6,39 +7,39 @@ fibonacci:
 .LFB0:
 	.cfi_startproc
 	endbr64
-	pushq	%rbp
+	push	rbp
 	.cfi_def_cfa_offset 16
 	.cfi_offset 6, -16
-	movq	%rsp, %rbp
+	mov	rbp, rsp
 	.cfi_def_cfa_register 6
-	pushq	%rbx
-	subq	$24, %rsp
+	push	rbx
+	sub	rsp, 24
 	.cfi_offset 3, -24
-	movl	%edi, -20(%rbp)
-	cmpl	$0, -20(%rbp)
+	mov	DWORD PTR -20[rbp], edi
+	cmp	DWORD PTR -20[rbp], 0
 	jg	.L2
-	movl	$0, %eax
+	mov	eax, 0
 	jmp	.L3
 .L2:
-	cmpl	$1, -20(%rbp)
+	cmp	DWORD PTR -20[rbp], 1
 	jne	.L4
-	movl	$1, %eax
+	mov	eax, 1
 	jmp	.L3
 .L4:
-	movl	-20(%rbp), %eax
-	subl	$1, %eax
-	movl	%eax, %edi
+	mov	eax, DWORD PTR -20[rbp]
+	sub	eax, 1
+	mov	edi, eax
 	call	fibonacci
-	movl	%eax, %ebx
-	movl	-20(%rbp), %eax
-	subl	$2, %eax
-	movl	%eax, %edi
+	mov	ebx, eax
+	mov	eax, DWORD PTR -20[rbp]
+	sub	eax, 2
+	mov	edi, eax
 	call	fibonacci
-	addl	%ebx, %eax
+	add	eax, ebx
 .L3:
-	addq	$24, %rsp
-	popq	%rbx
-	popq	%rbp
+	add	rsp, 24
+	pop	rbx
+	pop	rbp
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
@@ -55,23 +56,23 @@ main:
 .LFB1:
 	.cfi_startproc
 	endbr64
-	pushq	%rbp
+	push	rbp
 	.cfi_def_cfa_offset 16
 	.cfi_offset 6, -16
-	movq	%rsp, %rbp
+	mov	rbp, rsp
 	.cfi_def_cfa_register 6
-	subq	$16, %rsp
-	movl	$7, -4(%rbp)
-	movl	-4(%rbp), %eax
-	movl	%eax, %edi
+	sub	rsp, 16
+	mov	DWORD PTR -4[rbp], 7
+	mov	eax, DWORD PTR -4[rbp]
+	mov	edi, eax
 	call	fibonacci
-	movl	%eax, %edx
-	movl	-4(%rbp), %eax
-	movl	%eax, %esi
-	leaq	.LC0(%rip), %rdi
-	movl	$0, %eax
+	mov	edx, eax
+	mov	eax, DWORD PTR -4[rbp]
+	mov	esi, eax
+	lea	rdi, .LC0[rip]
+	mov	eax, 0
 	call	printf@PLT
-	movl	$0, %eax
+	mov	eax, 0
 	leave
 	.cfi_def_cfa 7, 8
 	ret
