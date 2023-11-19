@@ -24,14 +24,24 @@ def parse_block(block):
         L.append(parse_instruction(instruction))
     return L
 
-registers = {"rax", "rbx", "rcx", "rdx", "rsi", "rdi", "rbp", "rsp"}
+registers_64_bits = {"rax", "rbx", "rcx", "rdx", "rsi", "rdi", "rbp", "rsp"}
+registers_32_bits = {"eax", "ebx", "ecx", "edx", "esi", "edi", "ebp", "esp"}
+registers_16_bits = {"ax", "bx", "cx", "dx", "si", "di", "bp", "sp"}
+
+registers = registers_16_bits.union(registers_32_bits).union(registers_64_bits)
+
+def transform(register):
+    if (len(register) == 2): #register 16 bits
+        return "r"+register
+    if (register[0] == 'e'): #register 32 bits
+        return "r"+register[1:]
+    else : return register
 
 def definition(instructions,n):
     instruction = instructions[n]
     operand1 = instruction[1]
     if (operand1 in registers):
-        print(operand1,n)
-        return {operand1}
+        return {transform(operand1)}
     return set()
 
 def reference(instructions,n):
@@ -40,7 +50,7 @@ def reference(instructions,n):
     ref = set()
     for register in registers:
         if (register in operand2):
-            ref.add(register)
+            ref.add(transform(register))
     return ref
 
 def outlive(tab_registers_lived, n):
@@ -53,11 +63,6 @@ def live(instructions, tab_registers_lived, n):
     out = outlive(tab_registers_lived, n)
     d   = definition(instructions, n)
     r   = reference(instructions, n)
-    if (n==8):
-        print(d)
-        print(out)
-        print()
-        print((out.difference(d)).union(r))
     return (out.difference(d)).union(r)
 
 def registers_lived(parsed_block):
