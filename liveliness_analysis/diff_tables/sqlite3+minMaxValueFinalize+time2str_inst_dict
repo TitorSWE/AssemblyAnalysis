@@ -1,0 +1,22 @@
+4;sub rax, rdx
+3;mov rax, qword ptr [rbp - 0x28]
+3;movabs rdx,imm
+3;mov rax, rcx
+3;imul rdx
+3;mov rax, rdx
+3;sar rcx,imm
+3;mov rdx, rcx
+2;jmp imm
+2;mov rcx, rdx
+2;mov esi, 9
+2;mov eax, 0
+2;jg imm
+2;sar rax,imm
+2;imul rdx, rax,imm
+2;mov rax, qword ptr [rbp - 0x30]
+2;lea rcx, [rdx + rax]
+1;mov rdx, qword ptr [rbp - 0x10]
+1;mov rcx, qword ptr [rbp - 0x30]
+1;mov qword ptr [rbp - 8], rax
+1;mov rax, qword ptr [rbp - 8]
+1;mov r8, rcx

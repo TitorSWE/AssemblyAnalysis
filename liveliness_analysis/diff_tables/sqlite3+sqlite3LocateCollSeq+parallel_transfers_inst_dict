@@ -1,0 +1,42 @@
+20;call imm
+16;je imm
+13;mov rdi, rax
+11;test al, al
+7;mov rax, qword ptr [rbp - 0x90]
+6;mov rax, qword ptr [rbp - 0x98]
+5;mov rax, qword ptr [rbp - 0x30]
+3;mov dword ptr [rbp - 8], eax
+3;mov eax, dword ptr [rbp - 8]
+3;cmp dword ptr [rbp - 8], 0
+3;cmp dword ptr [rbp - 4], 0
+2;mov edx, 0
+2;mov eax, dword ptr [rbp - 0x58]
+2;mov r8, rdi
+2;xor eax, 1
+2;mov rsi, rdx
+2;mov edi, 0
+1;mov qword ptr [rbp - 0x20], rax
+1;mov eax,imm
+1;test rax, rax
+1;mov eax, 0
+1;cmp byte ptr [rbp - 9], 0
+1;mov dword ptr [rbp - 0x58], 1
+1;mov edi, eax
+1;lea rdi, [rbp - 0x72]
+1;lea rcx, [rbp - 0x71]
+1;mov rdx, qword ptr [rbp - 0xa0]
+1;mov rsi, qword ptr [rbp - 0x30]
+1;cmp qword ptr [rbp - 0x38], 0
+1;movzx eax, byte ptr [rax + 0x190]
+1;mov rax, qword ptr [rax + 0x1d8]
+1;movzx eax, byte ptr [rax + 0x30]
+1;mov qword ptr [rbp - 0x18], rax
+1;mov dword ptr [rbp - 4], eax
+1;mov byte ptr [rbp - 9], 1
+1;mov byte ptr [rbp - 0x21], 1
+1;mov rax, qword ptr [rbp - 0x38]
+1;mov dword ptr [rbp - 0x44], eax
+1;mov rax, rcx
+1;nop
+1;lea rcx, [rbp - 0x70]
+1;mov rsi, rcx

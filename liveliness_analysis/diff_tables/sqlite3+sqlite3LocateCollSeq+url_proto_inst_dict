@@ -1,0 +1,3 @@
+4;call imm
+3;mov rdi, rax
+2;mov rax, qword ptr [rbp - 0x18]

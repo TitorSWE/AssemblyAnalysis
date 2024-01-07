@@ -1,0 +1,7 @@
+11;mov rax, qword ptr [rbp - 8]
+2;mov rdi, rax
+2;call imm
+1;je imm
+1;mov rax, qword ptr [rax + 8]
+1;test rax, rax
+1;mov rax, qword ptr [rax + 0x10]

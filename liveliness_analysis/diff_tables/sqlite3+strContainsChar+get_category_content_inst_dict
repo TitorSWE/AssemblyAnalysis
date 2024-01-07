@@ -1,0 +1,10 @@
+4;add rax, rdx
+4;mov edx, dword ptr [rbp - 4]
+4;mov rax, rdx
+4;add rax, rax
+4;shl rax, 3
+4;mov rdx, rax
+2;call imm
+2;mov rax, qword ptr [rdx + rax]
+1;mov rdi, rax
+1;mov eax, 0

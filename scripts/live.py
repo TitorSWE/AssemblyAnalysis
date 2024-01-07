@@ -81,15 +81,15 @@ def registers_lived(parsed_block):
         if (set_unchanged == n):
             changed = False
     return live_registers
+
 #Directory of the block
 asm_directory = "../blocks"
 block_path = os.path.join(asm_directory, "main_binary_search.txt")
 
+#Step 1: Parsing
 parsed_block = parse_block(block_path)
 
+#
 res = registers_lived(parsed_block)
 print(res)
 
-a = {'rax'}
-b = {'rbp'}
-print(b.difference(a))

@@ -1,0 +1,7 @@
+10;jmp imm
+3;call imm
+3;cmp dword ptr [rbp - 4], 0
+2;mov rdi, rax
+1;je imm
+1;mov rax, qword ptr [rbp - 0x38]
+1;mov dword ptr [rbp - 8], 5

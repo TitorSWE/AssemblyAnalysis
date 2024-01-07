@@ -1,16 +1,15 @@
 import os
 import subprocess
 
-#Directory of ASM files
-asm_directory = "../asm_function"
-binary = os.path.join(asm_directory, "binarySearch.s")
+
 
 jump_operators = {"jmp", "ja", "jbe", "je", "jg", "jle","jne"}
 def_operators  = {"mov", "lea"}
 arith_operators = {"add", "sub", "mul", "div"}
 logic_operators = {"and", "or", "xor"}
 sch_rot_operators = {"shl", "shr", "rol", "ror"}
-ref_operators = arith_operators.union(logic_operators).union(sch_rot_operators)
+stack_operators = {"push", "pop"}
+ref_operators = arith_operators.union(logic_operators).union(sch_rot_operators).union(stack_operators)
 
 registers_64_bits = {"rax", "rbx", "rcx", "rdx", "rsi", "rdi", "rbp", "rsp"}
 registers_32_bits = {"eax", "ebx", "ecx", "edx", "esi", "edi", "ebp", "esp"}
@@ -33,9 +32,10 @@ class Node:
         self.Instruction = Instruction(instruction)
         self.IsVisited = False
         self.RegistersAlived = set()
+        self.CanBeInserted = set()
     
     def __str__(self):
-        return f"Node(IdLine={self.IdLine}, Pred={self.Pred}, Succ={self.Succ}, Instruction={self.Instruction}, IsVisited={self.IsVisited}, RegistersAlived={self.RegistersAlived})"
+        return f"Node(IdLine={self.IdLine}, Pred={self.Pred}, Succ={self.Succ}, Instruction={self.Instruction}, IsVisited={self.IsVisited}, RegistersAlived={self.RegistersAlived}, CanBeInserted={self.CanBeInserted})"
 
 class Instruction:
     def __init__(self, instruction):
@@ -47,8 +47,11 @@ class Instruction:
         for i in range(len(instruction)):
             if (instruction[i] == ","):
                 operand2 = instruction[i+2:len(instruction)-1]
-                left = instruction[1:i]
-        if (len(left)==0) : left = instruction[1:len(instruction)-1]
+                if (instruction[0] in {' ', '\t'}) : left = instruction[1:i]
+                else : left = instruction[0:i]
+        if (len(left)==0) : 
+            if (instruction[0] in {' ', '\t'}) : left = instruction[1:len(instruction)-1]
+            else : left = instruction[0:len(instruction)-1]
         for i in range(0,len(left)):
             if (left[i] == '\t' or left[i]==" "):
                 operator = left[0:i]
@@ -64,10 +67,13 @@ class Instruction:
         self.operand2 = operand2
     
     def __str__(self):
-        return f"Insruction(operator={self.operator}, operand1={self.operand1}, operand2={self.operand2})"
+        return f"Instruction(operator={self.operator}, operand1={self.operand1}, operand2={self.operand2})"
 
 
 def nodeToList(path):
+
+    functions = []
+
     nodes = []
     dictionaryFunction = {}
     dictionaryBasicBlock = {}
@@ -91,6 +97,17 @@ def nodeToList(path):
         if (node.Instruction.operator=="ret"):
             functionEnd = i
             dictionaryFunction[currentFunction] = [functionStart, functionEnd]
+
+    # All registers alived for imported function
+    for node in nodes :
+        if (node.Instruction.operand1 == "" and node.Instruction.operand2 == "" and node.Instruction.operator[-1] == ":"):
+            print(node.Instruction.operator[:-1])
+            functions.append(node.Instruction.operator[:-1])
+    for node in nodes :
+        if (node.Instruction.operator == "call" and node.Instruction.operand1 not in functions):
+            print(node.Instruction.operand1)
+            for r in registers_64_bits:
+                node.RegistersAlived.add(r)
 
     return [nodes, dictionaryFunction, dictionaryBasicBlock]
 
@@ -124,7 +141,7 @@ def buildGraph(index, listNode, dictionaryFunction, dictionaryBasicBlock):
                 buildGraph(index+1,listNode, dictionaryFunction, dictionaryBasicBlock)
                 buildGraph(start, listNode, dictionaryFunction, dictionaryBasicBlock)
         
-            if (currentNode.Instruction.operator in jump_operators):
+            elif (currentNode.Instruction.operator in jump_operators):
                 start = dictionaryBasicBlock[currentNode.Instruction.operand1]
                 currentNode.Succ.add(start)
                 listNode[start].Pred.add(index)
@@ -145,20 +162,20 @@ def buildGraph(index, listNode, dictionaryFunction, dictionaryBasicBlock):
 def definition(node):
     instruction = node.Instruction
     if ((instruction.operator in def_operators) and (instruction.operand1 in registers)):
-        print(node.IdLine)
-        print(transform(instruction.operand1))
         return {transform(instruction.operand1)}
     if ((instruction.operator == "xor") and (instruction.operand1 in registers) and (instruction.operand1 == instruction.operand2)):
-        return {instruction.operand1} #could be register which is not 64 bits for the moment
+        return {instruction.operand1} 
     return set()
 
+#The rest
 def reference(node):
     instruction = node.Instruction
     ref = set()
     for register in registers:
-        if (instruction.operator in ref_operators):
-            if ((register in instruction.operand2) or (register in instruction.operand1)):
-                ref.add(transform(register))
+        if (instruction.operator in ref_operators and register in instruction.operand1):
+            ref.add(transform(register))
+        elif (register in instruction.operand2):
+            ref.add(transform(register))
     return ref
 
 def outlive(nodes, node):
@@ -172,11 +189,6 @@ def live(node, nodes):
     out = outlive(nodes, node)
     d   = definition(node)
     r   = reference(node)
-    if (len(d)!=0):
-        print(d)
-        print(out)
-        print(r)
-        print((out.difference(d)).union(r))
     return (out.difference(d)).union(r)
 
 def registers_lived(nodes):
@@ -189,20 +201,38 @@ def registers_lived(nodes):
             live_n = live(node, nodes)
             if (len(live_n.difference(node.RegistersAlived)) == 0):
                 set_unchanged += 1
-            node.RegistersAlived = live_n
+            node.RegistersAlived = live_n.union(node.RegistersAlived) 
         if (set_unchanged == n):
             changed = False
     return nodes
 
-res = nodeToList(binary)
-listNode = res[0]
-dicoFunction = res[1]
-dicoBasicBlock = res[2]
-index = dicoFunction["main"][0]
-buildGraph(index, listNode, dicoFunction, dicoBasicBlock)
-registers_lived(listNode)
-for node in listNode:
-    print(node.IdLine, node.Instruction, node.RegistersAlived)
+def analysis(asmFile):
+    res = nodeToList(asmFile)
+    listNode = res[0]
+    dicoFunction = res[1]
+    dicoBasicBlock = res[2]
+    index = dicoFunction["main"][0]
+    buildGraph(index, listNode, dicoFunction, dicoBasicBlock)
+    return registers_lived(listNode)
 
-print(transform("edx"))
+
+def save_liveliness(asmFile):
+    repertoire_sortie = "../asm_function_analysis"
+    nodes = analysis(asmFile)
+    if not os.path.exists(repertoire_sortie):
+        os.makedirs(repertoire_sortie)
+
+    nom_fichier = os.path.basename(asmFile)
+    fichier_sortie = os.path.join(repertoire_sortie, nom_fichier)
+
+    with open(asmFile, 'r') as f_entree, open(fichier_sortie, 'w') as f_sortie:
+        numero_ligne = 0
+        for ligne in f_entree:
+            set = nodes[numero_ligne].RegistersAlived
+            elements = [str(element) for element in set]
+            chaine_resultat = ', '.join(elements)
+            nouvelle_ligne = f"{ligne.strip()}" + "    ||     " + "{" + chaine_resultat +"}\n"
+            f_sortie.write(nouvelle_ligne)
+            numero_ligne += 1
+
 

@@ -1,0 +1,3 @@
+2;mov rax, qword ptr [rbp - 0x18]
+1;mov rax, qword ptr [rbp - 8]
+1;jmp imm

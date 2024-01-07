@@ -1,0 +1,13 @@
+7;add rax, rdx
+6;mov rcx, qword ptr [rbp - 0x18]
+6;mov rdx, qword ptr [rbp - 8]
+6;mov rax, rdx
+6;add rax, rax
+6;shl rax, 4
+6;add rax, rcx
+4;mov rax, qword ptr [rax]
+4;add rax, 8
+2;mov rax, qword ptr [rbp - 0x18]
+1;mov rdx, qword ptr [rbp - 0x10]
+1;shl rdx, 3
+1;mov qword ptr [rax], 0

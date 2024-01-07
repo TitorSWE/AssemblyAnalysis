@@ -1,0 +1,2 @@
+3;mov rdx, qword ptr [rbp - 8]
+3;mov rax, qword ptr [rbp - 0x18]

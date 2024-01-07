@@ -1,0 +1,39 @@
+15;jmp imm
+13;mov rax, qword ptr [rbp - 0x98]
+12;mov rdi, rax
+11;call imm
+11;je imm
+7;test rax, rax
+7;lea rax, [rbp - 0x70]
+6;mov rax, qword ptr [rbp - 0x90]
+6;mov qword ptr [rbp - 0x48], rax
+6;mov byte ptr [rbp - 1], 1
+5;nop
+4;mov rsi, rcx
+3;mov eax, 0
+3;mov rax, qword ptr [rax]
+3;mov rax, qword ptr [rbp - 0x28]
+3;mov rax, qword ptr [rbp - 0x48]
+2;mov rdx, qword ptr [rax]
+2;mov rax, qword ptr [rbp - 0x88]
+2;mov rax, qword ptr [rax + 0x18]
+2;add rax, rdx
+2;mov rax, qword ptr [rax + 0x1d8]
+2;mov rax, qword ptr [rax + 0x60]
+2;mov byte ptr [rbp - 0x1d], 1
+2;test al, al
+2;mov rax, qword ptr [rbp - 0x18]
+2;mov esi, ecx
+2;mov eax, dword ptr [rax + 0xc]
+1;mov rsi, rdx
+1;mov qword ptr [rbp - 0x28], rax
+1;mov rax, qword ptr [rax + 8]
+1;cmp byte ptr [rbp - 0xa0], 0
+1;movzx eax, byte ptr [rax]
+1;mov eax, dword ptr [rax + 8]
+1;movzx eax, byte ptr [rbp - 0x1d]
+1;xor eax, 1
+1;cmp eax,imm
+1;lea rdx, [rbp - 0x48]
+1;mov rax, qword ptr [rax + 0x20]
+1;mov rax, qword ptr [rax + 0xd0]

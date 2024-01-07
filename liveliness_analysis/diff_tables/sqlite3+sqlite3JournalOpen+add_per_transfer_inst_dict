@@ -1,0 +1,5 @@
+1;jne imm
+1;jmp imm
+1;mov qword ptr [rax], rdx
+1;mov rdx, qword ptr [rbp - 8]
+1;add rax, 1

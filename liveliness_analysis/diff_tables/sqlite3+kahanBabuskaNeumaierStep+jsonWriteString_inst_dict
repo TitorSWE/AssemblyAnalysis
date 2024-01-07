@@ -1,0 +1,7 @@
+8;call imm
+5;mov rdi, rax
+3;lea rax, [rbp - 0x30]
+3;mov rsi, rax
+2;mov rax, qword ptr [rbp - 0x38]
+1;mov rax, qword ptr [rbp - 0x40]
+1;mov edi,imm

@@ -1,0 +1,6 @@
+3;mov esi,imm
+2;lea rax, [rbp - 0x30]
+2;lea rax, [rbp - 0x130]
+1;mov rdi, rax
+1;cmp qword ptr [rbp - 8], 0
+1;mov byte ptr [rax], 0

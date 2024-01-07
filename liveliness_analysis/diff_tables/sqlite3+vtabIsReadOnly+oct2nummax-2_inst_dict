@@ -1,0 +1,1 @@
+2;mov rax, qword ptr [rbp - 0x18]

@@ -1,0 +1,6 @@
+7;call imm
+4;mov rdi, rax
+2;mov rax, qword ptr [rbp - 0x18]
+2;jmp imm
+1;mov rsi, rdx
+1;mov edi,imm

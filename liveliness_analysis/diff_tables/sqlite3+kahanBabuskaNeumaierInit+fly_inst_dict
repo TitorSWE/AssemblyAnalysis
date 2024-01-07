@@ -1,0 +1,33 @@
+23;mov rax, qword ptr [rbp - 0x118]
+11;mov eax, ecx
+5;mov eax, dword ptr [rax + 0x38]
+4;cdqe
+3;shr rax,imm
+3;mov eax, dword ptr [rax + 0x20]
+3;imul rax, rax,imm
+3;shr eax, 6
+3;imul edx, eax,imm
+3;sub eax, edx
+3;mov eax, eax
+3;lea rdx, [rax*4]
+3;mov ecx, dword ptr [rdx + rax]
+3;mov eax,imm
+3;cdq
+3;idiv dword ptr [rbp - 4]
+3;mov edx, 0
+3;mov dword ptr [rbp - 8], eax
+3;mov eax, dword ptr [rbp - 8]
+3;mov byte ptr [rbp + rax - 0x110],imm
+2;mov rdi, rax
+2;call imm
+1;mov eax, 0
+1;jmp imm
+1;mov dword ptr [rax + 0x3c], edx
+1;mov eax, dword ptr [rax + 0x3c]
+1;lea rax, [rbp - 0x110]
+1;mov esi, eax
+1;div esi
+1;mov edi, eax
+1;div edi
+1;mov dword ptr [rax + 0x38], edx
+1;mov edx, dword ptr [rax + 0x3c]

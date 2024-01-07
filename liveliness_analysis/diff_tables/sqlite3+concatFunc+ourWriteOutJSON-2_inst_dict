@@ -1,0 +1,16 @@
+6;add rax, rdx
+5;mov rax, qword ptr [rbp - 0x18]
+5;call imm
+3;mov rdi, rax
+3;mov eax, dword ptr [rbp - 4]
+3;movsxd rdx, eax
+3;mov rax, rdx
+3;add rax, rax
+3;shl rax, 3
+3;mov rdx, rax
+3;mov rax, qword ptr [rbp - 0x20]
+1;mov rsi, rdx
+1;mov eax, 0
+1;test rax, rax
+1;mov rsi, rax
+1;mov edi,imm

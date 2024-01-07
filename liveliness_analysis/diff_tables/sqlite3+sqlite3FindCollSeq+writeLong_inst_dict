@@ -1,0 +1,21 @@
+9;jmp imm
+7;cmp eax,imm
+6;je imm
+6;mov rax, qword ptr [rbp - 0x20]
+5;mov rax, qword ptr [rbp - 0x28]
+5;mov eax, 0
+4;mov rdi, rax
+4;call imm
+4;mov byte ptr [rbp - 1], 1
+3;mov qword ptr [rbp - 0x10], rax
+3;mov rax, qword ptr [rbp - 0x18]
+2;mov rsi, rcx
+2;mov eax, dword ptr [rax + 8]
+1;mov rdx, qword ptr [rbp - 0x10]
+1;mov eax, dword ptr [rax + 0x68]
+1;ja imm
+1;nop
+1;mov eax, dword ptr [rax + 0xc]
+1;cmp byte ptr [rbp - 0x30], 0
+1;mov rdx, qword ptr [rax]
+1;mov rax, qword ptr [rax + 0x18]

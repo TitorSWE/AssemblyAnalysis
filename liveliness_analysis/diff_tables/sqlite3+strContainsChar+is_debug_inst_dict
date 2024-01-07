@@ -1,0 +1,2 @@
+1;mov rax, qword ptr [rbp - 8]
+1;mov rax, qword ptr [rax]

@@ -1,0 +1,4 @@
+6;mov rax, qword ptr [rbp - 8]
+3;add rax, rdx
+1;xor eax, 1
+1;test al, al

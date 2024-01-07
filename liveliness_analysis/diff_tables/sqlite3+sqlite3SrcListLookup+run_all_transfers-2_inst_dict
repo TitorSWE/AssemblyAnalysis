@@ -1,0 +1,8 @@
+7;mov rax, qword ptr [rbp - 0x28]
+2;mov rdi, rax
+2;call imm
+2;mov dword ptr [rbp - 0x34], eax
+1;mov qword ptr [rbp - 8], rax
+1;jne imm
+1;mov rdx, qword ptr [rbp - 0x30]
+1;cmp dword ptr [rbp - 0x34], 0

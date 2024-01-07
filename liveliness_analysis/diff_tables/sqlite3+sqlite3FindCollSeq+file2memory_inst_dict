@@ -1,0 +1,9 @@
+7;mov rdi, rax
+7;call imm
+4;lea rax, [rbp - 0x1030]
+3;mov qword ptr [rax], 0
+2;je imm
+1;mov rax, qword ptr [rbp - 0x1040]
+1;mov rax, qword ptr [rbp - 0x1038]
+1;mov rax, qword ptr [rbp - 0x1048]
+1;mov qword ptr [rdx], rax

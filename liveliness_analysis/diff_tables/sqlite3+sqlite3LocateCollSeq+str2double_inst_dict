@@ -1,0 +1,3 @@
+2;call imm
+1;movsd xmm0, qword ptr [rbp - 8]
+1;mov rax, qword ptr [rbp - 0x20]
