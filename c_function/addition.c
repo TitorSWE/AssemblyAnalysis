@@ -6,8 +6,6 @@ int addition(int a, int b) {
 }
 
 int main() {
-    // Utilisation des fonctions
-    saluer();
     
     int a = 10, b = 5;
     printf("Addition : %d\n", addition(a, b));

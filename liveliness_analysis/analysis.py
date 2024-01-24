@@ -17,6 +17,8 @@ registers_16_bits = {"ax", "bx", "cx", "dx", "si", "di", "bp", "sp"}
 
 registers = registers_16_bits.union(registers_32_bits).union(registers_64_bits)
 
+registers_referenced = set()
+
 def transform(register):
     if (len(register) == 2): #register 16 bits
         return "r"+register
@@ -64,7 +66,12 @@ class Instruction:
 
         self.operator = operator
         self.operand1 = operand1
+        if (operand1 in registers):
+            registers_referenced.add(operand1)
         self.operand2 = operand2
+        if (operand2 in registers):
+            registers_referenced.add(operand2)
+        self.string_instruction = instruction
     
     def __str__(self):
         return f"Instruction(operator={self.operator}, operand1={self.operand1}, operand2={self.operand2})"
@@ -101,18 +108,18 @@ def nodeToList(path):
     # All registers alived for imported function
     for node in nodes :
         if (node.Instruction.operand1 == "" and node.Instruction.operand2 == "" and node.Instruction.operator[-1] == ":"):
-            print(node.Instruction.operator[:-1])
             functions.append(node.Instruction.operator[:-1])
     for node in nodes :
         if (node.Instruction.operator == "call" and node.Instruction.operand1 not in functions):
-            print(node.Instruction.operand1)
             for r in registers_64_bits:
                 node.RegistersAlived.add(r)
+            node.RegistersAlived.add("rax")
 
     return [nodes, dictionaryFunction, dictionaryBasicBlock]
 
 
 def buildGraph(index, listNode, dictionaryFunction, dictionaryBasicBlock):
+
     currentNode = listNode[index]
     if ((currentNode.IsVisited == False) and (currentNode.Instruction.operator != "ret")):
         
@@ -161,9 +168,9 @@ def buildGraph(index, listNode, dictionaryFunction, dictionaryBasicBlock):
 #definition only with mov, lea, or xor reg,reg
 def definition(node):
     instruction = node.Instruction
-    if ((instruction.operator in def_operators) and (instruction.operand1 in registers)):
+    if ((instruction.operator in def_operators) and (instruction.operand1 in registers_referenced)):
         return {transform(instruction.operand1)}
-    if ((instruction.operator == "xor") and (instruction.operand1 in registers) and (instruction.operand1 == instruction.operand2)):
+    if ((instruction.operator == "xor") and (instruction.operand1 in registers_referenced) and (instruction.operand1 == instruction.operand2)):
         return {instruction.operand1} 
     return set()
 
@@ -171,7 +178,7 @@ def definition(node):
 def reference(node):
     instruction = node.Instruction
     ref = set()
-    for register in registers:
+    for register in registers_referenced:
         if (instruction.operator in ref_operators and register in instruction.operand1):
             ref.add(transform(register))
         elif (register in instruction.operand2):
@@ -211,8 +218,14 @@ def analysis(asmFile):
     listNode = res[0]
     dicoFunction = res[1]
     dicoBasicBlock = res[2]
-    index = dicoFunction["main"][0]
-    buildGraph(index, listNode, dicoFunction, dicoBasicBlock)
+    file_name = os.path.basename(asmFile)
+    function_name = file_name.split("+")[2]
+    index_start = dicoFunction[function_name][0] #début de l'analyse
+    #index = dicoFunction["main"][0] #si on ne place dans le cadre d'une analyse de programme
+    buildGraph(index_start, listNode, dicoFunction, dicoBasicBlock)
+    index_end = dicoFunction[function_name][1]
+    listNode[index_end].RegistersAlived.add("rax")
+
     return registers_lived(listNode)
 
 

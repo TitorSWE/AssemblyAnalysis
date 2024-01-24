@@ -39,8 +39,6 @@ main:
 	mov	rbp, rsp
 	.cfi_def_cfa_register 6
 	sub	rsp, 16
-	mov	eax, 0
-	call	saluer@PLT
 	mov	DWORD PTR -8[rbp], 10
 	mov	DWORD PTR -4[rbp], 5
 	mov	edx, DWORD PTR -4[rbp]
